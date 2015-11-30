@@ -22,7 +22,12 @@ public class UI {
 			FRAME_SIZE = 160,
 			ROTOR_START = 0.8f,
 			ROTOR_SIZE = 40,
-			ROTOR_SPEED_AMPLIFIER = 100f;
+			ROTOR_SPEED_AMPLIFIER = 10,
+			HAIR_SLIDE_START = 0.5f,
+			HAIR_SLIDE_END = 0.6f,
+			HAIR_EXTENSION = 20,
+			HAIR_SIZE = 25,
+			HAIR_AMPLIFICATION = 0.5f;
 
 	private static float transIn = 0, m1r, m2r, m3r, m4r;
 
@@ -53,19 +58,32 @@ public class UI {
 			m2r -= Values.getM2() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
 			m3r += Values.getM3() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
 			m4r -= Values.getM4() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
-//			hvlRotate(cx + FRAME_SIZE - ROTOR_SIZE, cy, m1r);
-//			hvlDrawLine(cx + FRAME_SIZE - ROTOR_SIZE, cy - ROTOR_SIZE, cx + FRAME_SIZE - ROTOR_SIZE, cy + ROTOR_SIZE, Color.white, 4f);
-//			hvlResetRotation();
-//			hvlRotate(cx, cy + FRAME_SIZE - ROTOR_SIZE, m2r);
-//			hvlDrawLine(cx - ROTOR_SIZE, cy + FRAME_SIZE - ROTOR_SIZE, cx - ROTOR_SIZE, cy + FRAME_SIZE + ROTOR_SIZE, Color.white, 4f);
-//			hvlResetRotation();
-//			hvlRotate(cx + FRAME_SIZE - ROTOR_SIZE, cy, m3r);
-//			hvlDrawLine(cx - FRAME_SIZE + ROTOR_SIZE, cy - ROTOR_SIZE, cx - FRAME_SIZE + ROTOR_SIZE, cy + ROTOR_SIZE, Color.white, 4f);
-//			hvlResetRotation();
-//			hvlRotate(cx, cy + FRAME_SIZE - ROTOR_SIZE, m4r);
-//			hvlDrawLine(cx - ROTOR_SIZE, cy - FRAME_SIZE + ROTOR_SIZE, cx - ROTOR_SIZE, cy - FRAME_SIZE + ROTOR_SIZE, Color.white, 4f);
-//			hvlResetRotation();
+			hvlRotate(cx, cy - FRAME_SIZE + ROTOR_SIZE, m1r);
+			hvlDrawLine(cx, cy - FRAME_SIZE, cx, cy - FRAME_SIZE + (ROTOR_SIZE*2), Color.white, 4f);
+			hvlResetRotation();
+			hvlRotate(cx + FRAME_SIZE - ROTOR_SIZE, cy, m2r);
+			hvlDrawLine(cx + FRAME_SIZE, cy, cx + FRAME_SIZE - (ROTOR_SIZE*2), cy, Color.white, 4f);
+			hvlResetRotation();
+			hvlRotate(cx, cy + FRAME_SIZE - ROTOR_SIZE, m3r);
+			hvlDrawLine(cx, cy + FRAME_SIZE, cx, cy + FRAME_SIZE - (ROTOR_SIZE*2), Color.white, 4f);
+			hvlResetRotation();
+			hvlRotate(cx - FRAME_SIZE + ROTOR_SIZE, cy, m4r);
+			hvlDrawLine(cx - FRAME_SIZE, cy, cx - FRAME_SIZE + (ROTOR_SIZE*2), cy, Color.white, 4f);
+			hvlResetRotation();
 		}
+		
+		float offset3 = Math.min(Math.max(HvlMath.map(transIn, HAIR_SLIDE_START, HAIR_SLIDE_END, 0f, 1f), 0f), 1f) * ((CENTER_SQUARE_SIZE*2) + HAIR_EXTENSION);
+		float wx = (float)Math.max(Math.min(((Values.getM4() - Values.getM2()) * HAIR_AMPLIFICATION) * CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), -CENTER_SQUARE_SIZE);
+		float wy = (float)Math.max(Math.min(((Values.getM1() - Values.getM3()) * HAIR_AMPLIFICATION) * CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), -CENTER_SQUARE_SIZE);
+		hvlDrawLine(cx + wx, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cx + wx, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION + offset3, Color.white, 1f);
+		hvlDrawLine(cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy, cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION + offset3, cy + wy, Color.white, 1f);
+		float offset4 = Math.min(Math.max(HvlMath.map(transIn, HAIR_SLIDE_START, HAIR_SLIDE_END, 0f, 1f), 0f), 1f) * HAIR_SIZE;
+		hvlDrawLine(cx + wx - offset4, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cx + wx + offset4, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION, Color.white);
+		hvlDrawLine(cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy - offset4, cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy + offset4, Color.white);
+	}
+	
+	public static boolean isReady(){
+		return transIn >= 1;
 	}
 
 }

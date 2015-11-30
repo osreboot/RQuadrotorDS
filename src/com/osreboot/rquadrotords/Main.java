@@ -26,6 +26,10 @@ public class Main extends HvlTemplateInteg2D{
 	@Override
 	public void update(float delta){
 		UI.draw(delta);
+		Values.setM1((float)Math.cos(getTimer().getTotalTime()) + 1f);
+		Values.setM2((float)Math.sin(getTimer().getTotalTime()) + 1f);
+		Values.setM3(2f - (float)Math.cos(getTimer().getTotalTime()) - 1f);
+		Values.setM4(2f - (float)Math.sin(getTimer().getTotalTime()) - 1f);
 	}
 
 }
