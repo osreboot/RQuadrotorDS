@@ -2,7 +2,7 @@ package com.osreboot.rquadrotords;
 
 public class Values {
 
-	private static float m1, m2, m3, m4;
+	private static float m1 = 0.1f, m2 = 0.1f, m3 = 0.1f, m4 = 0.1f;
 
 	protected static float getM1(){
 		return m1;

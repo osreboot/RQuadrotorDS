@@ -9,16 +9,22 @@ import com.osreboot.ridhvl.template.HvlTemplateInteg2D;
 
 public class UI {
 
-	public static final float TRANSIN_TIME = 4f,
-			CENTER_SQUARE_ROT_START = 0.1f,
-			CENTER_SQUARE_ROT_END = 0.4f,
-			CENTER_SQUARE_SLIDE_START = 0.5f,
-			CENTER_SQUARE_SLIDE_END = 0.8f,
+	public static final float TRANSIN_TIME = 8f,
+			CENTER_SQUARE_ROT_START = 0.05f,
+			CENTER_SQUARE_ROT_END = 0.2f,
+			CENTER_SQUARE_SLIDE_START = 0.25f,
+			CENTER_SQUARE_SLIDE_END = 0.4f,
 			CENTER_SQUARE_SIZE = 200,
-			STROBE_START = 0.6f,
-			STROBE_END = 1f;
+			STROBE_START = 0.3f,
+			STROBE_END = 0.5f,
+			FRAME_SLIDE_START = 0.5f,
+			FRAME_SLIDE_END = 0.7f,
+			FRAME_SIZE = 160,
+			ROTOR_START = 0.8f,
+			ROTOR_SIZE = 40,
+			ROTOR_SPEED_AMPLIFIER = 100f;
 
-	private static float transIn = 0;
+	private static float transIn = 0, m1r, m2r, m3r, m4r;
 
 	@SuppressWarnings("deprecation")
 	public static void draw(float delta){
@@ -37,6 +43,29 @@ public class UI {
 		
 		float strobe = (float)Math.abs(Math.sin(Main.getNewestInstance().getTimer().getTotalTime() * 50));
 		if(transIn > STROBE_START && transIn < STROBE_END && strobe < HvlMath.map(transIn, STROBE_START, STROBE_END, 0f, 5f)) Main.font.drawWord("enabled", cx - (Main.font.getLineWidth("enabled")/2*0.4f), cy - Main.font.getFontHeight()*0.2f, 0.4f, Color.white);
+	
+		float offset2 = Math.min(Math.max(HvlMath.map(transIn, FRAME_SLIDE_START, FRAME_SLIDE_END, 0f, 1f), 0f), 1f) * FRAME_SIZE;
+		hvlDrawLine(cx - offset2, cy, cx + offset2, cy, Color.white, 4f);
+		hvlDrawLine(cx, cy - offset2, cx, cy + offset2, Color.white, 4f);
+		
+		if(transIn >= ROTOR_START){
+			m1r += Values.getM1() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
+			m2r -= Values.getM2() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
+			m3r += Values.getM3() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
+			m4r -= Values.getM4() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
+//			hvlRotate(cx + FRAME_SIZE - ROTOR_SIZE, cy, m1r);
+//			hvlDrawLine(cx + FRAME_SIZE - ROTOR_SIZE, cy - ROTOR_SIZE, cx + FRAME_SIZE - ROTOR_SIZE, cy + ROTOR_SIZE, Color.white, 4f);
+//			hvlResetRotation();
+//			hvlRotate(cx, cy + FRAME_SIZE - ROTOR_SIZE, m2r);
+//			hvlDrawLine(cx - ROTOR_SIZE, cy + FRAME_SIZE - ROTOR_SIZE, cx - ROTOR_SIZE, cy + FRAME_SIZE + ROTOR_SIZE, Color.white, 4f);
+//			hvlResetRotation();
+//			hvlRotate(cx + FRAME_SIZE - ROTOR_SIZE, cy, m3r);
+//			hvlDrawLine(cx - FRAME_SIZE + ROTOR_SIZE, cy - ROTOR_SIZE, cx - FRAME_SIZE + ROTOR_SIZE, cy + ROTOR_SIZE, Color.white, 4f);
+//			hvlResetRotation();
+//			hvlRotate(cx, cy + FRAME_SIZE - ROTOR_SIZE, m4r);
+//			hvlDrawLine(cx - ROTOR_SIZE, cy - FRAME_SIZE + ROTOR_SIZE, cx - ROTOR_SIZE, cy - FRAME_SIZE + ROTOR_SIZE, Color.white, 4f);
+//			hvlResetRotation();
+		}
 	}
 
 }
