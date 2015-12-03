@@ -35,9 +35,14 @@ public class UI {
 			YAW_AMPLIFIER = 30f,
 			YAW_SUB_DIST = 50,
 			YAW_SUB_LENGTH = 0.15f,
-			YAW_SUB_LENGTH2 = 0.05f;
+			YAW_SUB_LENGTH2 = 0.05f,
+			ALT_START = 0.8f,
+			ALT_END = 1f,
+			ALT_AMPLIFIER = 1f,
+			ALT_BAR1_LENGTH = 40,
+			ALT_BAR2_LENGTH = 20;
 
-	private static float transIn = 0, m1r, m2r, m3r, m4r;
+	private static float transIn = 0, m1r, m2r, m3r, m4r, alt;
 
 	@SuppressWarnings("deprecation")
 	public static void draw(float delta){
@@ -45,7 +50,7 @@ public class UI {
 		float cx = ((HvlTemplateInteg2D)Main.getNewestInstance()).getWidth()/2, cy = ((HvlTemplateInteg2D)Main.getNewestInstance()).getHeight()/2;
 
 		if(transIn > CENTER_SQUARE_ROT_START && transIn < CENTER_SQUARE_ROT_END) hvlRotate(cx, cy, HvlMath.map(transIn, CENTER_SQUARE_ROT_START, CENTER_SQUARE_ROT_END, 0f, 1f)*-180 - 90);
-		float offset1 = Math.min(Math.max(HvlMath.map(transIn, CENTER_SQUARE_SLIDE_START, CENTER_SQUARE_SLIDE_END, 0f, 1f), 0f), 1f) * CENTER_SQUARE_SIZE;
+		float offset1 = HvlMath.mapl(transIn, CENTER_SQUARE_SLIDE_START, CENTER_SQUARE_SLIDE_END, 0f, 1f) * CENTER_SQUARE_SIZE;
 		hvlDrawLine(cx - CENTER_SQUARE_SIZE, cy + offset1, cx + CENTER_SQUARE_SIZE, cy + offset1, Color.white);
 		hvlDrawLine(cx - CENTER_SQUARE_SIZE, cy - offset1, cx + CENTER_SQUARE_SIZE, cy - offset1, Color.white);
 		hvlDrawLine(cx + offset1, cy - CENTER_SQUARE_SIZE, cx + offset1, cy + CENTER_SQUARE_SIZE, Color.white);
@@ -57,7 +62,7 @@ public class UI {
 		float strobe = (float)Math.abs(Math.sin(Main.getNewestInstance().getTimer().getTotalTime() * 50));
 		if(transIn > STROBE_START && transIn < STROBE_END && strobe < HvlMath.map(transIn, STROBE_START, STROBE_END, 0f, 5f)) Main.font.drawWord("enabled", cx - (Main.font.getLineWidth("enabled")/2*0.4f), cy - Main.font.getFontHeight()*0.2f, 0.4f, Color.white);
 	
-		float offset2 = Math.min(Math.max(HvlMath.map(transIn, FRAME_SLIDE_START, FRAME_SLIDE_END, 0f, 1f), 0f), 1f) * FRAME_SIZE;
+		float offset2 = HvlMath.mapl(transIn, FRAME_SLIDE_START, FRAME_SLIDE_END, 0f, 1f) * FRAME_SIZE;
 		hvlDrawLine(cx - offset2, cy, cx + offset2, cy, Color.white, FRAME_THICKNESS);
 		hvlDrawLine(cx, cy - offset2, cx, cy + offset2, Color.white, FRAME_THICKNESS);
 		
@@ -80,23 +85,28 @@ public class UI {
 			hvlResetRotation();
 		}
 		
-		float offset3 = Math.min(Math.max(HvlMath.map(transIn, HAIR_SLIDE_START, HAIR_SLIDE_END, 0f, 1f), 0f), 1f) * ((CENTER_SQUARE_SIZE*2) + HAIR_EXTENSION);
+		float offset3 = HvlMath.mapl(transIn, HAIR_SLIDE_START, HAIR_SLIDE_END, 0f, 1f) * ((CENTER_SQUARE_SIZE*2) + HAIR_EXTENSION);
 		float wx = (float)Math.max(Math.min(((Values.getM4() - Values.getM2()) * HAIR_AMPLIFICATION) * CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), -CENTER_SQUARE_SIZE);
 		float wy = (float)Math.max(Math.min(((Values.getM1() - Values.getM3()) * HAIR_AMPLIFICATION) * CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), -CENTER_SQUARE_SIZE);
 		hvlDrawLine(cx + wx, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cx + wx, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION + offset3, Color.white, 1f);
 		hvlDrawLine(cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy, cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION + offset3, cy + wy, Color.white, 1f);
-		float offset4 = Math.min(Math.max(HvlMath.map(transIn, HAIR_SLIDE_START, HAIR_SLIDE_END, 0f, 1f), 0f), 1f) * HAIR_SIZE;
+		float offset4 = HvlMath.mapl(transIn, HAIR_SLIDE_START, HAIR_SLIDE_END, 0f, 1f) * HAIR_SIZE;
 		hvlDrawLine(cx + wx - offset4, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cx + wx + offset4, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION, Color.white);
 		hvlDrawLine(cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy - offset4, cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy + offset4, Color.white);
 		
-		float offset5 = Math.min(Math.max(HvlMath.map(transIn, YAW_START, YAW_END, 0f, 1f), 0f), 1f) * YAW_SIZE;
-		hvlRotate(cx, cy, HvlMath.constrain((Values.getM4() - Values.getM3() * YAW_AMPLIFIER) - (Values.getM1() - Values.getM2() * YAW_AMPLIFIER), -90, 90));
+		float offset5 = HvlMath.mapl(transIn, YAW_START, YAW_END, 0f, 1f) * YAW_SIZE;
+		hvlRotate(cx, cy, HvlMath.limit(-((Values.getM1() + Values.getM3()) - (Values.getM2() + Values.getM4())) * YAW_AMPLIFIER, -90, 90));
 		hvlDrawLine(cx - offset5, cy, cx + offset5, cy, Color.white);
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH), cy + YAW_SUB_DIST, cx + (offset5 * YAW_SUB_LENGTH), cy + YAW_SUB_DIST, Color.white);
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH), cy - YAW_SUB_DIST, cx + (offset5 * YAW_SUB_LENGTH), cy - YAW_SUB_DIST, Color.white);
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH2), cy + (YAW_SUB_DIST * 2), cx + (offset5 * YAW_SUB_LENGTH2), cy + (YAW_SUB_DIST * 2), Color.white);
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH2), cy - (YAW_SUB_DIST * 2), cx + (offset5 * YAW_SUB_LENGTH2), cy - (YAW_SUB_DIST * 2), Color.white);
 		hvlResetRotation();
+		
+		if(transIn >= 1) alt += (Values.getM1() + Values.getM2() + Values.getM3() + Values.getM4())/4f - 0.5f;
+		float offset6 = HvlMath.mapl(transIn, ALT_START, ALT_END, 0f, 1f);
+		hvlDrawLine(cx - CENTER_SQUARE_SIZE, cy, cx - CENTER_SQUARE_SIZE + (ALT_BAR1_LENGTH*offset6), cy, Color.white);
+		hvlDrawLine(cx + CENTER_SQUARE_SIZE, cy, cx + CENTER_SQUARE_SIZE - (ALT_BAR1_LENGTH*offset6), cy, Color.white);
 	}
 	
 	public static boolean isReady(){
