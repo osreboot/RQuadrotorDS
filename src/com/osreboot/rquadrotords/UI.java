@@ -90,7 +90,7 @@ public class UI {
 		hvlDrawLine(cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy - offset4, cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy + offset4, Color.white);
 		
 		float offset5 = Math.min(Math.max(HvlMath.map(transIn, YAW_START, YAW_END, 0f, 1f), 0f), 1f) * YAW_SIZE;
-		hvlRotate(cx, cy, HvlMath.constrain((Values.getM4() - Values.getM3() * YAW_AMPLIFIER) - (Values.getM1() - Values.getM2() * YAW_AMPLIFIER), -90, 90));
+		hvlRotate(cx, cy, HvlMath.limit((Values.getM4() - Values.getM3() * YAW_AMPLIFIER) - (Values.getM1() - Values.getM2() * YAW_AMPLIFIER), -90, 90));
 		hvlDrawLine(cx - offset5, cy, cx + offset5, cy, Color.white);
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH), cy + YAW_SUB_DIST, cx + (offset5 * YAW_SUB_LENGTH), cy + YAW_SUB_DIST, Color.white);
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH), cy - YAW_SUB_DIST, cx + (offset5 * YAW_SUB_LENGTH), cy - YAW_SUB_DIST, Color.white);
