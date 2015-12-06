@@ -38,6 +38,10 @@ public class Main extends HvlTemplateInteg2D{
 		m2 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
 		m3 += -profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
 		m4 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+		m1 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+		m2 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+		m3 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+		m4 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
 		Values.setM1(m1);
 		Values.setM2(m2);
 		Values.setM3(m3);

@@ -38,9 +38,10 @@ public class UI {
 			YAW_SUB_LENGTH2 = 0.05f,
 			ALT_START = 0.8f,
 			ALT_END = 1f,
-			ALT_AMPLIFIER = 1f,
+			ALT_AMPLIFIER = 40f,
 			ALT_BAR1_LENGTH = 40,
-			ALT_BAR2_LENGTH = 20;
+			ALT_BAR2_LENGTH = 20,
+			ALT_DIVISIONS = 8f;
 
 	private static float transIn = 0, m1r, m2r, m3r, m4r, alt;
 
@@ -103,10 +104,16 @@ public class UI {
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH2), cy - (YAW_SUB_DIST * 2), cx + (offset5 * YAW_SUB_LENGTH2), cy - (YAW_SUB_DIST * 2), Color.white);
 		hvlResetRotation();
 		
-		if(transIn >= 1) alt += (Values.getM1() + Values.getM2() + Values.getM3() + Values.getM4())/4f - 0.5f;
+		if(transIn >= 1) alt += ((Values.getM1() + Values.getM2() + Values.getM3() + Values.getM4())/4f - 1.1f) * ALT_AMPLIFIER;
 		float offset6 = HvlMath.mapl(transIn, ALT_START, ALT_END, 0f, 1f);
-		hvlDrawLine(cx - CENTER_SQUARE_SIZE, cy, cx - CENTER_SQUARE_SIZE + (ALT_BAR1_LENGTH*offset6), cy, Color.white);
-		hvlDrawLine(cx + CENTER_SQUARE_SIZE, cy, cx + CENTER_SQUARE_SIZE - (ALT_BAR1_LENGTH*offset6), cy, Color.white);
+		for(float f = 0; f <= 1f; f += 1f/ALT_DIVISIONS){
+			float offset7 = HvlMath.limit(cy - CENTER_SQUARE_SIZE + ((alt + (CENTER_SQUARE_SIZE*f)) % (CENTER_SQUARE_SIZE*2)), cy - CENTER_SQUARE_SIZE, cy + CENTER_SQUARE_SIZE);
+			float offset8 = HvlMath.limit(cy - CENTER_SQUARE_SIZE + ((alt - (CENTER_SQUARE_SIZE*f)) % (CENTER_SQUARE_SIZE*2)), cy - CENTER_SQUARE_SIZE, cy + CENTER_SQUARE_SIZE);
+			hvlDrawLine(cx - CENTER_SQUARE_SIZE, offset7, cx - CENTER_SQUARE_SIZE + (f == 0.5f ? (ALT_BAR1_LENGTH*offset6) : (ALT_BAR2_LENGTH*offset6)), offset7, Color.white);
+			hvlDrawLine(cx + CENTER_SQUARE_SIZE, offset7, cx + CENTER_SQUARE_SIZE - (f == 0.5f ? (ALT_BAR1_LENGTH*offset6) : (ALT_BAR2_LENGTH*offset6)), offset7, Color.white);
+			hvlDrawLine(cx - CENTER_SQUARE_SIZE, offset8, cx - CENTER_SQUARE_SIZE + (f == 0.5f ? (ALT_BAR1_LENGTH*offset6) : (ALT_BAR2_LENGTH*offset6)), offset8, Color.white);
+			hvlDrawLine(cx + CENTER_SQUARE_SIZE, offset8, cx + CENTER_SQUARE_SIZE - (f == 0.5f ? (ALT_BAR1_LENGTH*offset6) : (ALT_BAR2_LENGTH*offset6)), offset8, Color.white);
+		}
 	}
 	
 	public static boolean isReady(){
