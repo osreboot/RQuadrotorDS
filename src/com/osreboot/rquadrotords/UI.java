@@ -52,10 +52,10 @@ public class UI {
 
 		if(transIn > CENTER_SQUARE_ROT_START && transIn < CENTER_SQUARE_ROT_END) hvlRotate(cx, cy, HvlMath.map(transIn, CENTER_SQUARE_ROT_START, CENTER_SQUARE_ROT_END, 0f, 1f)*-180 - 90);
 		float offset1 = HvlMath.mapl(transIn, CENTER_SQUARE_SLIDE_START, CENTER_SQUARE_SLIDE_END, 0f, 1f) * CENTER_SQUARE_SIZE;
-		hvlDrawLine(cx - CENTER_SQUARE_SIZE, cy + offset1, cx + CENTER_SQUARE_SIZE, cy + offset1, Color.white);
-		hvlDrawLine(cx - CENTER_SQUARE_SIZE, cy - offset1, cx + CENTER_SQUARE_SIZE, cy - offset1, Color.white);
-		hvlDrawLine(cx + offset1, cy - CENTER_SQUARE_SIZE, cx + offset1, cy + CENTER_SQUARE_SIZE, Color.white);
-		hvlDrawLine(cx - offset1, cy - CENTER_SQUARE_SIZE, cx - offset1, cy + CENTER_SQUARE_SIZE, Color.white);
+		hvlDrawLinec(cx, cy + offset1, CENTER_SQUARE_SIZE * 2, 0, Color.white);
+		hvlDrawLinec(cx, cy - offset1, CENTER_SQUARE_SIZE * 2, 0, Color.white);
+		hvlDrawLinec(cx + offset1, cy, 0, CENTER_SQUARE_SIZE * 2, Color.white);
+		hvlDrawLinec(cx - offset1, cy, 0, CENTER_SQUARE_SIZE * 2, Color.white);
 		if(transIn > CENTER_SQUARE_ROT_START && transIn < CENTER_SQUARE_ROT_END) hvlResetRotation();
 		
 		hvlForceRefresh();
