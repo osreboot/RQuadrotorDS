@@ -42,14 +42,16 @@ public class Main extends HvlTemplateInteg2D{
 		m2 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
 		m3 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
 		m4 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
-		Values.setM1(m1);
-		Values.setM2(m2);
-		Values.setM3(m3);
-		Values.setM4(m4);
+		Values.setM1ctrl(m1);
+		Values.setM2ctrl(m2);
+		Values.setM3ctrl(m3);
+		Values.setM4ctrl(m4);
 //		Values.setM1((float)Math.cos(getTimer().getTotalTime()) + 1f);
 //		Values.setM2((float)Math.sin(getTimer().getTotalTime()) + 1f);
 //		Values.setM3(2f - (float)Math.cos(getTimer().getTotalTime()) - 1f);
 //		Values.setM4(2f - (float)Math.sin(getTimer().getTotalTime()) - 1f);
+		//System.out.println(Values.getM1() + ":" + Values.getM2() + ":" + Values.getM3() + ":" + Values.getM4());
+		Values.compile();
 	}
 
 }

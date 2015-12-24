@@ -9,7 +9,7 @@ import com.osreboot.ridhvl.template.HvlTemplateInteg2D;
 
 public class UI {
 
-	public static final float TRANSIN_TIME = 8f,
+	public static final float TRANSIN_TIME = 0.002f,//8f,
 			CENTER_SQUARE_ROT_START = 0.05f,
 			CENTER_SQUARE_ROT_END = 0.2f,
 			CENTER_SQUARE_SLIDE_START = 0.25f,
@@ -68,10 +68,10 @@ public class UI {
 		hvlDrawLine(cx, cy - offset2, cx, cy + offset2, Color.white, FRAME_THICKNESS);
 		
 		if(transIn >= ROTOR_START){
-			m1r += Values.getM1() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
-			m2r -= Values.getM2() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
-			m3r += Values.getM3() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
-			m4r -= Values.getM4() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
+			m1r += Values.getM1ctrl() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
+			m2r -= Values.getM2ctrl() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
+			m3r += Values.getM3ctrl() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
+			m4r -= Values.getM4ctrl() * ROTOR_SPEED_AMPLIFIER * ((transIn - ROTOR_START)/(1f - ROTOR_START));
 			hvlRotate(cx, cy - FRAME_SIZE + ROTOR_SIZE, m1r);
 			hvlDrawLine(cx, cy - FRAME_SIZE, cx, cy - FRAME_SIZE + (ROTOR_SIZE*2), Color.white, FRAME_THICKNESS);
 			hvlResetRotation();
@@ -87,8 +87,8 @@ public class UI {
 		}
 		
 		float offset3 = HvlMath.mapl(transIn, HAIR_SLIDE_START, HAIR_SLIDE_END, 0f, 1f) * ((CENTER_SQUARE_SIZE*2) + HAIR_EXTENSION);
-		float wx = (float)Math.max(Math.min(((Values.getM4() - Values.getM2()) * HAIR_AMPLIFICATION) * CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), -CENTER_SQUARE_SIZE);
-		float wy = (float)Math.max(Math.min(((Values.getM1() - Values.getM3()) * HAIR_AMPLIFICATION) * CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), -CENTER_SQUARE_SIZE);
+		float wx = (float)Math.max(Math.min(((Values.getM4ctrl() - Values.getM2ctrl()) * HAIR_AMPLIFICATION) * CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), -CENTER_SQUARE_SIZE);
+		float wy = (float)Math.max(Math.min(((Values.getM1ctrl() - Values.getM3ctrl()) * HAIR_AMPLIFICATION) * CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), -CENTER_SQUARE_SIZE);
 		hvlDrawLine(cx + wx, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cx + wx, cy - CENTER_SQUARE_SIZE - HAIR_EXTENSION + offset3, Color.white, 1f);
 		hvlDrawLine(cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy, cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION + offset3, cy + wy, Color.white, 1f);
 		float offset4 = HvlMath.mapl(transIn, HAIR_SLIDE_START, HAIR_SLIDE_END, 0f, 1f) * HAIR_SIZE;
@@ -96,7 +96,7 @@ public class UI {
 		hvlDrawLine(cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy - offset4, cx - CENTER_SQUARE_SIZE - HAIR_EXTENSION, cy + wy + offset4, Color.white);
 		
 		float offset5 = HvlMath.mapl(transIn, YAW_START, YAW_END, 0f, 1f) * YAW_SIZE;
-		hvlRotate(cx, cy, HvlMath.limit(-((Values.getM1() + Values.getM3()) - (Values.getM2() + Values.getM4())) * YAW_AMPLIFIER, -90, 90));
+		hvlRotate(cx, cy, HvlMath.limit(-((Values.getM1ctrl() + Values.getM3ctrl()) - (Values.getM2ctrl() + Values.getM4ctrl())) * YAW_AMPLIFIER, -90, 90));
 		hvlDrawLine(cx - offset5, cy, cx + offset5, cy, Color.white);
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH), cy + YAW_SUB_DIST, cx + (offset5 * YAW_SUB_LENGTH), cy + YAW_SUB_DIST, Color.white);
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH), cy - YAW_SUB_DIST, cx + (offset5 * YAW_SUB_LENGTH), cy - YAW_SUB_DIST, Color.white);
@@ -104,7 +104,7 @@ public class UI {
 		hvlDrawLine(cx - (offset5 * YAW_SUB_LENGTH2), cy - (YAW_SUB_DIST * 2), cx + (offset5 * YAW_SUB_LENGTH2), cy - (YAW_SUB_DIST * 2), Color.white);
 		hvlResetRotation();
 		
-		if(transIn >= 1) alt += ((Values.getM1() + Values.getM2() + Values.getM3() + Values.getM4())/4f - 1.1f) * ALT_AMPLIFIER;
+		if(transIn >= 1) alt += ((Values.getM1ctrl() + Values.getM2ctrl() + Values.getM3ctrl() + Values.getM4ctrl())/4f - 1.1f) * ALT_AMPLIFIER;
 		float offset6 = HvlMath.mapl(transIn, ALT_START, ALT_END, 0f, 1f);
 		for(float f = 0; f <= 1f; f += 1f/ALT_DIVISIONS){
 			float offset7 = HvlMath.limit(cy - CENTER_SQUARE_SIZE + ((alt + (CENTER_SQUARE_SIZE*f)) % (CENTER_SQUARE_SIZE*2)), cy - CENTER_SQUARE_SIZE, cy + CENTER_SQUARE_SIZE);
