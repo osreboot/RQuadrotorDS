@@ -2,6 +2,7 @@ package com.osreboot.rquadrotords;
 
 import com.osreboot.ridhvl.HvlFontUtil;
 import com.osreboot.ridhvl.display.collection.HvlDisplayModeDefault;
+import com.osreboot.ridhvl.input.HvlController;
 import com.osreboot.ridhvl.input.collection.HvlCPG_Gamepad;
 import com.osreboot.ridhvl.painter.painter2d.HvlFontPainter2D;
 import com.osreboot.ridhvl.template.HvlTemplateInteg2D;
@@ -29,7 +30,6 @@ public class Main extends HvlTemplateInteg2D{
 
 	@Override
 	public void update(float delta){
-		UI.draw(delta);
 		float m1 = -profile.getValue(HvlCPG_Gamepad.JOY1Y) + 1.1f;
 		float m2 = -profile.getValue(HvlCPG_Gamepad.JOY1X) + 1.1f;
 		float m3 = profile.getValue(HvlCPG_Gamepad.JOY1Y) + 1.1f;
@@ -52,6 +52,7 @@ public class Main extends HvlTemplateInteg2D{
 //		Values.setM4(2f - (float)Math.sin(getTimer().getTotalTime()) - 1f);
 		//System.out.println(Values.getM1() + ":" + Values.getM2() + ":" + Values.getM3() + ":" + Values.getM4());
 		Values.compile();
+		Module.globalUpdate(delta);
 	}
 
 }

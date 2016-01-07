@@ -7,6 +7,7 @@ import org.newdawn.slick.Color;
 import com.osreboot.ridhvl.HvlMath;
 import com.osreboot.ridhvl.template.HvlTemplateInteg2D;
 
+@Deprecated
 public class UI {
 
 	public static final float TRANSIN_TIME = 0.002f,//8f,
