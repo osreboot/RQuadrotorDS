@@ -2,10 +2,11 @@ package com.osreboot.rquadrotords;
 
 import com.osreboot.ridhvl.HvlFontUtil;
 import com.osreboot.ridhvl.display.collection.HvlDisplayModeDefault;
-import com.osreboot.ridhvl.input.HvlController;
 import com.osreboot.ridhvl.input.collection.HvlCPG_Gamepad;
 import com.osreboot.ridhvl.painter.painter2d.HvlFontPainter2D;
 import com.osreboot.ridhvl.template.HvlTemplateInteg2D;
+import com.osreboot.rquadrotords.modules.ModuleCalibration;
+import com.osreboot.rquadrotords.modules.ModuleManeuverInput;
 
 public class Main extends HvlTemplateInteg2D{
 
@@ -19,38 +20,60 @@ public class Main extends HvlTemplateInteg2D{
 
 	public static HvlFontPainter2D font;
 
+	private static boolean emergencyStopped = false;
+
 	HvlCPG_Gamepad profile;
-	
+
 	@Override
 	public void initialize(){
 		getTextureLoader().loadResource("Font");
 		font = new HvlFontPainter2D(getTexture(0), HvlFontUtil.SIMPLISTIC, HvlFontPainter2D.CHALK);
 		profile = new HvlCPG_Gamepad();
+
+		new ModuleManeuverInput();
+		new ModuleCalibration();
 	}
 
 	@Override
 	public void update(float delta){
-		float m1 = -profile.getValue(HvlCPG_Gamepad.JOY1Y) + 1.1f;
-		float m2 = -profile.getValue(HvlCPG_Gamepad.JOY1X) + 1.1f;
-		float m3 = profile.getValue(HvlCPG_Gamepad.JOY1Y) + 1.1f;
-		float m4 = profile.getValue(HvlCPG_Gamepad.JOY1X) + 1.1f;
-		m1 += -profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
-		m2 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
-		m3 += -profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
-		m4 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
-		m1 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
-		m2 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
-		m3 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
-		m4 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
-		Values.setM1ctrl(m1);
-		Values.setM2ctrl(m2);
-		Values.setM3ctrl(m3);
-		Values.setM4ctrl(m4);
-//		Values.setM1((float)Math.cos(getTimer().getTotalTime()) + 1f);
-//		Values.setM2((float)Math.sin(getTimer().getTotalTime()) + 1f);
-//		Values.setM3(2f - (float)Math.cos(getTimer().getTotalTime()) - 1f);
-//		Values.setM4(2f - (float)Math.sin(getTimer().getTotalTime()) - 1f);
-		//System.out.println(Values.getM1() + ":" + Values.getM2() + ":" + Values.getM3() + ":" + Values.getM4());
+		if(profile.getValue(HvlCPG_Gamepad.BUTTON_B) == 1) emergencyStopped = true;
+		if(!emergencyStopped){
+			if(profile.getValue(HvlCPG_Gamepad.TRIGGER_RIGHT) > 0.5f){
+				float m1 = -profile.getValue(HvlCPG_Gamepad.JOY1Y) + 1.1f;
+				float m2 = -profile.getValue(HvlCPG_Gamepad.JOY1X) + 1.1f;
+				float m3 = profile.getValue(HvlCPG_Gamepad.JOY1Y) + 1.1f;
+				float m4 = profile.getValue(HvlCPG_Gamepad.JOY1X) + 1.1f;
+				m1 += -profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+				m2 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+				m3 += -profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+				m4 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+				m1 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				m2 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				m3 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				m4 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				Values.setM1cbtn(Values.getM1cbtn() + m1);
+				Values.setM2cbtn(Values.getM2cbtn() + m2);
+				Values.setM3cbtn(Values.getM3cbtn() + m3);
+				Values.setM4cbtn(Values.getM4cbtn() + m4);
+			}else{
+				float m1 = -profile.getValue(HvlCPG_Gamepad.JOY1Y) + 1.1f;
+				float m2 = -profile.getValue(HvlCPG_Gamepad.JOY1X) + 1.1f;
+				float m3 = profile.getValue(HvlCPG_Gamepad.JOY1Y) + 1.1f;
+				float m4 = profile.getValue(HvlCPG_Gamepad.JOY1X) + 1.1f;
+				m1 += -profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+				m2 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+				m3 += -profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+				m4 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
+				m1 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				m2 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				m3 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				m4 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				Values.setM1ctrl(m1);
+				Values.setM2ctrl(m2);
+				Values.setM3ctrl(m3);
+				Values.setM4ctrl(m4);
+			}
+		}
 		Values.compile();
 		Module.globalUpdate(delta);
 	}
