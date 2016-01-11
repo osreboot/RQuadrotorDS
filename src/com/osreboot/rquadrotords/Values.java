@@ -6,10 +6,28 @@ public class Values {
 			m1ctrl = 0f, m2ctrl = 0f, m3ctrl = 0f, m4ctrl = 0f, 
 			m1cbtn = 0f, m2cbtn = 0f, m3cbtn = 0f, m4cbtn = 0f;
 
-	public static void compile(){
-		
+	public static final float BASE_SPEED = 0.1f, CONTROL_WEIGHT = 0.2f, CALIBRATION_WEIGHT = 0.001f, MIN_DELAY = 0.1f;
+
+	private static float delay = 0;
+
+	public static void compile(float delta){
+		m1 = BASE_SPEED + (m1ctrl * CONTROL_WEIGHT) + (m1cbtn * CALIBRATION_WEIGHT);
+		m2 = BASE_SPEED + (m2ctrl * CONTROL_WEIGHT) + (m2cbtn * CALIBRATION_WEIGHT);
+		m3 = BASE_SPEED + (m3ctrl * CONTROL_WEIGHT) + (m3cbtn * CALIBRATION_WEIGHT);
+		m4 = BASE_SPEED + (m4ctrl * CONTROL_WEIGHT) + (m4cbtn * CALIBRATION_WEIGHT);
+		if(m1 >= 1 || m1 <= 0 || 
+				m2 >= 1 || m2 <= 0 || 
+				m3 >= 1 || m3 <= 0 || 
+				m4 >= 1 || m4 <= 0){
+			Main.emergencyStop();
+		}
+		delay += delta;
+		if(delay >= MIN_DELAY){
+			Connection.send("{" + m1 + "," + m2 + "," + m3 + "," + m4 + "}");
+			delay = 0;
+		}
 	}
-	
+
 	public static float getM1(){
 		return m1;
 	}
@@ -105,5 +123,5 @@ public class Values {
 	public static void setM4cbtn(float m4cbtnArg){
 		m4cbtn = m4cbtnArg;
 	}
-	
+
 }
