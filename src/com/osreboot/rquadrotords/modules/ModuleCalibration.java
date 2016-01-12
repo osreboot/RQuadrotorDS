@@ -1,7 +1,6 @@
 package com.osreboot.rquadrotords.modules;
 
-import static com.osreboot.ridhvl.painter.painter2d.HvlPainter2D.hvlDrawLinec;
-import static com.osreboot.ridhvl.painter.painter2d.HvlPainter2D.hvlDrawQuadc;
+import static com.osreboot.ridhvl.painter.painter2d.HvlPainter2D.*;
 
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
@@ -15,7 +14,9 @@ public class ModuleCalibration extends Module{
 	public static final float CENTER_SQUARE_SIZE = 180f,
 			CENTER_SQUARE_DIVISIONS = 4f,
 			CURSOR_AMPLIFIER = 1f,
-			CURSOR_SIZE = 10f;
+			CURSOR_SIZE = 10f,
+			YAW_AMPLIFIER = 1f,
+			YAW_SIZE = 50f;
 	
 	public ModuleCalibration(){
 		super(Display.getWidth()/64*53, Display.getHeight()/2);
@@ -34,6 +35,10 @@ public class ModuleCalibration extends Module{
 			hvlDrawLinec(getX() - CENTER_SQUARE_SIZE * f, getY(), 0, CENTER_SQUARE_SIZE * 2, Color.white, f == 0 ? 2 : 1);
 		}
 		hvlDrawQuadc(getX() + HvlMath.limit(Values.getM4cbtn() - Values.getM2cbtn() * CURSOR_AMPLIFIER, -CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), getY() + HvlMath.limit(Values.getM1cbtn() - Values.getM3cbtn() * CURSOR_AMPLIFIER, -CENTER_SQUARE_SIZE, CENTER_SQUARE_SIZE), CURSOR_SIZE, CURSOR_SIZE, Color.white);
+		
+		hvlRotate(getX(), getY(), HvlMath.limit(-((Values.getM1cbtn() + Values.getM3cbtn()) - (Values.getM2cbtn() + Values.getM4cbtn())) * YAW_AMPLIFIER, -90, 90));
+		hvlDrawLine(getX() - YAW_SIZE, getY(), getX() + YAW_SIZE, getY(), Color.white);
+		hvlResetRotation();
 	}
 	
 }
