@@ -3,7 +3,9 @@ package com.osreboot.rquadrotords;
 import org.newdawn.slick.Color;
 
 import com.osreboot.ridhvl.HvlFontUtil;
+import com.osreboot.ridhvl.action.HvlAction1;
 import com.osreboot.ridhvl.display.collection.HvlDisplayModeDefault;
+import com.osreboot.ridhvl.input.HvlInput;
 import com.osreboot.ridhvl.input.collection.HvlCPG_Gamepad;
 import com.osreboot.ridhvl.painter.painter2d.HvlFontPainter2D;
 import com.osreboot.ridhvl.template.HvlTemplateInteg2D;
@@ -25,6 +27,8 @@ public class Main extends HvlTemplateInteg2D{
 	private static boolean emergencyStopped = false;
 
 	HvlCPG_Gamepad profile;
+	
+	private static HvlInput arm;
 
 	@Override
 	public void initialize(){
@@ -36,6 +40,18 @@ public class Main extends HvlTemplateInteg2D{
 
 		new ModuleManeuverInput();
 		new ModuleCalibration();
+		arm = new HvlInput(new HvlInput.InputFilter(){
+			@Override
+			public float getCurrentOutput(){
+				return profile.getValue(HvlCPG_Gamepad.BUTTON_Y);
+			}
+		});
+		arm.setPressedAction(new HvlAction1<HvlInput>(){
+			@Override
+			public void run(HvlInput i){
+				Values.arm();
+			}
+		});
 	}
 
 	@Override
@@ -69,10 +85,10 @@ public class Main extends HvlTemplateInteg2D{
 				m2 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
 				m3 += -profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
 				m4 += profile.getValue(HvlCPG_Gamepad.JOY2X)/6f;
-				m1 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
-				m2 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
-				m3 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
-				m4 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/6f;
+				m1 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/2f;
+				m2 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/2f;
+				m3 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/2f;
+				m4 += profile.getValue(HvlCPG_Gamepad.JOY2Y)/2f;
 				Values.setM1ctrl(m1);
 				Values.setM2ctrl(m2);
 				Values.setM3ctrl(m3);

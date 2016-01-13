@@ -6,20 +6,42 @@ public class Values {
 			m1ctrl = 0f, m2ctrl = 0f, m3ctrl = 0f, m4ctrl = 0f, 
 			m1cbtn = 0f, m2cbtn = 0f, m3cbtn = 0f, m4cbtn = 0f;
 
-	public static final float BASE_SPEED = 0.1f, CONTROL_WEIGHT = 0.2f, CALIBRATION_WEIGHT = 0.001f, MIN_DELAY = 0.1f;
+	public static final float BASE_SPEED = 0.6f, CONTROL_WEIGHT = 0.05f, CALIBRATION_WEIGHT = 0.001f, MIN_DELAY = 0.1f,
+			SPEED_LIMIT = 3;
 
 	private static float delay = 0;
 
+	private static float arming = 0;
+
+	public static void arm(){
+		if(arming == 0) arming = 0.1f;
+	}
+
 	public static void compile(float delta){
-		m1 = BASE_SPEED + (m1ctrl * CONTROL_WEIGHT) + (m1cbtn * CALIBRATION_WEIGHT);
-		m2 = BASE_SPEED + (m2ctrl * CONTROL_WEIGHT) + (m2cbtn * CALIBRATION_WEIGHT);
-		m3 = BASE_SPEED + (m3ctrl * CONTROL_WEIGHT) + (m3cbtn * CALIBRATION_WEIGHT);
-		m4 = BASE_SPEED + (m4ctrl * CONTROL_WEIGHT) + (m4cbtn * CALIBRATION_WEIGHT);
-		if(m1 >= 1 || m1 <= 0 || 
-				m2 >= 1 || m2 <= 0 || 
-				m3 >= 1 || m3 <= 0 || 
-				m4 >= 1 || m4 <= 0){
-			Main.emergencyStop();
+		if(arming > 0 && arming < 3f){
+			arming += delta;
+			m1 = 0.2f * (int)arming;
+			m2 = 0.2f * (int)arming;
+			m3 = 0.2f * (int)arming;
+			m4 = 0.2f * (int)arming;
+		}else{
+			if(arming == 0){
+				m1 = 0;
+				m2 = 0;
+				m3 = 0;
+				m4 = 0;
+			}else{
+				m1 = BASE_SPEED + (m1ctrl * CONTROL_WEIGHT) + (m1cbtn * CALIBRATION_WEIGHT);
+				m2 = BASE_SPEED + (m2ctrl * CONTROL_WEIGHT) + (m2cbtn * CALIBRATION_WEIGHT);
+				m3 = BASE_SPEED + (m3ctrl * CONTROL_WEIGHT) + (m3cbtn * CALIBRATION_WEIGHT);
+				m4 = BASE_SPEED + (m4ctrl * CONTROL_WEIGHT) + (m4cbtn * CALIBRATION_WEIGHT);
+				if(m1 >= SPEED_LIMIT || m1 <= 0 || 
+						m2 >= SPEED_LIMIT || m2 <= 0 || 
+						m3 >= SPEED_LIMIT || m3 <= 0 || 
+						m4 >= SPEED_LIMIT || m4 <= 0){
+					Main.emergencyStop();
+				}
+			}
 		}
 		delay += delta;
 		if(delay >= MIN_DELAY){
